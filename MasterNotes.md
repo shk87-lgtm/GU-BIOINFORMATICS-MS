@@ -110,6 +110,16 @@ $-q -u mjd356
 $module load mamba/
 $mamba activate megahit-env
 $mamba install -c bioconda seqkit
+$grep ">" final.contigs.fa | wc
+#59,754 contigs
+$less final.contigs.fa
+#Looks like DNA
+$seqkit stats -a final.contigs.fa
+#longest contig: 185,956
+#minimum: 200
+#sum_len: 30,261,886
+#avg_len: 506.4
+#Q1: 340, Q2: 397, Q3:  495 sum_gap: 0 N50: 463, N50_snum: 1559  GC%: 55.1 all otehr values are zero
 
 
 
