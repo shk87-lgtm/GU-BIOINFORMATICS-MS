@@ -107,6 +107,11 @@ echo "Done. Contigs should be in: ${OUTDIR}/final.contigs.fa"
 
 $-q -u mjd356
 
+$module load mamba/
+$mamba activate megahit-env
+$mamba install -c bioconda seqkit
+
+
 
 
 
