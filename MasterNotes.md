@@ -14,6 +14,7 @@ $mkdir -p fastqc_out
 $fastqc -o fastqc_out SRR6996005.sra_1.fastq.gz
 $fastqc -o fastqc_out SRR6996005.sra_2.fastq.gz
 $ls fastqc_out
+$nano Trim_MS_1.txt
 #Trimmomatic Slurm:
   
 #!/bin/bash
@@ -43,4 +44,10 @@ trimmomatic PE -threads $SLURM_CPUS_PER_TASK \
 ILLUMINACLIP:$ADAPTERS:2:30:10 \ SLIDINGWINDOW:4:20 MINLEN:50
 
 $fastqc -o fastqc_out SRR6996005_forward_paired.fastq.gz SRR6996005_forward_unpaired.fastq.gz SRR6996005_reverse_paired.fastq.gz SRR6996005_reverse_unpaired.fastq.gz
+
+$module load mamba/
+#environment manager
+$mamba create -y -n megahit-env -c conda-forge -c bioconda megahit
+#create an environment that contains megahit, and names environment "megahit-env"
+
 
