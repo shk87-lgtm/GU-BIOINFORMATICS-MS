@@ -105,7 +105,7 @@ megahit \
 
 echo "Done. Contigs should be in: ${OUTDIR}/final.contigs.fa"
 
-#
+$-q -u mjd356
 
 
 
