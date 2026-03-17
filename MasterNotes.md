@@ -1,6 +1,6 @@
-This is the master notes
-Sample Data: Palsa Frozen Replicate A: SAMN08784143
-UNDER mjd 356
+#This is the master notes
+#Sample Data: Palsa Frozen Replicate A: SAMN08784143
+#UNDER mjd 356
 $module load anaconda3
 $conda create -n sra_env -c bioconda sra-tools
 $conda activate sra_env
@@ -14,7 +14,7 @@ $mkdir -p fastqc_out
 $fastqc -o fastqc_out SRR6996005.sra_1.fastq.gz
 $fastqc -o fastqc_out SRR6996005.sra_2.fastq.gz
 $ls fastqc_out
-Trimmomatic Slurm:
+#Trimmomatic Slurm:
   
 #!/bin/bash
 #SBATCH --job-name=”trim_MS”
