@@ -128,6 +128,58 @@ $ mamba activate vs2-env
 $ rm -rf db 					# just in case there is a failed attempt before, 
 $ virsorter setup -d db -j 4		# run setup for the database
 
+$cd logs+scripts
+$nano virsorter_MS.txt
+
+SLURM SCRIPT
+
+#!/bin/bash
+#SBATCH --job-name=virsorter_MS  
+#SBATCH --nodes=1
+#SBATCH --mail-type=END,FAIL 
+#SBATCH --mail-user=mjd356@georgetown.edu
+#SBATCH --cpus-per-task=8                 
+#SBATCH --mem=20G                         
+#SBATCH --time=03:00:00                  
+#SBATCH --output=/home/mjd356/virome_project/logs+scripts/virsorter.out      
+#SBATCH --error=/home/mjd356/virome_project/logs+scripts/virsorter.err    
+
+# ==== Load mamba (students: no need to change) ====
+module load mamba
+source $(mamba info --base)/etc/profile.d/conda.sh
+
+# Activate the environment where you had VirSorter2 installed
+mamba activate vs2-env
+
+# ==== Set paths and filenames (students: edit this block!) ====
+#set up directories
+INDIR=/home/mjd356/virome_project/assembled/	 #directory where input will come from
+OUTROOT=/home/mjd356/virome_project/virsorter/	 #directory output will go
+mkdir -p "${OUTROOT}"					 #new directory to be created for output files
+
+SAMPLE_ID= SAMN08784143                #just the basic sample name (sample2 ?)
+DBDIR=/home/mjd356/virome_project/db           #just the basic sample name (sample2 ?)
+INPUT="${INDIR}/final.contigs.fa"			 #contig file name/location
+OUTDIR="${OUTROOT}/vs2-${SAMPLE_ID}" 			 #where you’ll find the outputs
+mkdir -p "${OUTDIR}"
+
+
+# ==== Run virsorter2 with >5kb cutoff and DNA virus categories first
+echo "Running VirSorter2 on ${INPUT}"
+virsorter run \
+  -w "${OUTDIR}" \
+  -i "${INPUT}" \
+  --db-dir “${DBDIR}”\
+  --keep-original-seq \
+  --include-groups dsDNAphage,NCLDV,ssDNA \
+  --min-length 5000
+
+echo "Done."
+
+$cd ..
+$sbatch virsorter_MS.txt
+
+
 
 
 
