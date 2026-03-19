@@ -122,6 +122,14 @@ $seqkit stats -a final.contigs.fa
 #Q1: 340, Q2: 397, Q3:  495 sum_gap: 0 N50: 463, N50_snum: 1559  GC%: 55.1 all otehr values are zero
 
 
+$ module load mamba
+$ mamba create -y -n vs2-env -c conda-forge -c bioconda virsorter
+$ mamba activate vs2-env
+$ rm -rf db 					# just in case there is a failed attempt before, 
+$ virsorter setup -d db -j 4		# run setup for the database
+
+
+
 
 
 
