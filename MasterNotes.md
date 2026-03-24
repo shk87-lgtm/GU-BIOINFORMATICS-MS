@@ -179,6 +179,53 @@ echo "Done."
 $cd ..
 $sbatch virsorter_MS.txt
 
+$module load checkv						#its available as a module on the HPC
+$checkv download_database ./				#make sure you’re in your checkv folder!
+
+$nano checkvslurm
+
+SLURM script:
+
+#!/bin/bash
+#SBATCH --job-name=checkv_MS
+#SBATCH --output=/home/mjd356/virome_project/logs+scripts/checkv-%j.out
+#SBATCH --error=/home/mjd356/virome_project/logs+scripts/checkv-%j.err
+#SBATCH --time=03:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=16G
+#SBATCH --mail-type=END,FAIL
+#SBATCH --mail-user=mjd356@georgetown.edu
+
+
+# ==== Load checkv program module (students: no need to change) ====
+
+module load checkv
+
+
+# ==== Set variables, paths, and filenames (students: edit this block!) ====
+
+CHECKVDB="/home/mjd356/virome_project/checkv/checkv-db-v1.5"
+
+SAMPLE_ID="vOTUs"
+INPUT="/home/mjd356/virome_project/virome_project/votus/final-viral-combined_min5kb.fa"
+OUTDIR="/home/mjd356/virome_project/checkv/${SAMPLE_ID}"
+
+mkdir -p "${OUTDIR}"
+
+
+# ==== run checkv (students: no need to change. The second line is the command) ====
+echo "Running CheckV on ${INPUT}"
+checkv end_to_end "${INPUT}" "${OUTDIR}" -d "${CHECKVDB}" -t ${SLURM_CPUS_PER_TASK}
+echo "Done."
+
+$ gcloud storage cp gs://gu-biology-dept-class/ClassProject/votus_10kb_6samples.fna [location]
+
+
+
+
+
 
 
 
