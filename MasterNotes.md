@@ -244,8 +244,9 @@ nano bowtieslurm
 
 SLURM SCRIPT:
 
+
 #!/bin/bash
-#SBATCH --job name=bowtie2_vOTUs                 
+#SBATCH --jobname=bowtie2_vOTUs                 
 #SBATCH --output=/home/mjd356/virome_project/logs+scripts/bowtie-%j.out
 #SBATCH --error=/home/mjd356/virome_project/logs+scripts/bowtie-%j.err
 #SBATCH --mail-type=END,FAIL
@@ -255,8 +256,8 @@ SLURM SCRIPT:
 
 # ---------SET UP----------
 SAMPLE= ”sample2_mjd356”  	#whatever your sample # is!
-INDEX="home/mjd356/virome_project/bowtie2/votu_index"
-OUTPUTDIR="home/mjd356/virome_project/bowtie2/${SAMPLE}"
+INDEX="/home/mjd356/virome_project/bowtie2/votu_index"
+OUTPUTDIR="/home/mjd356/virome_project/bowtie2/${SAMPLE}"
 
 # --------- LOAD MODULES ----------
 module purge
@@ -284,6 +285,7 @@ echo "Indexing"
 samtools index "${SAMPLE}_sorted.bam"
 
 echo "Finished ${SAMPLE}"
+
 
 $ gcloud storage cp [file] gs://gu-biology-dept-class/ClassProject/bam
 
