@@ -220,16 +220,71 @@ echo "Running CheckV on ${INPUT}"
 checkv end_to_end "${INPUT}" "${OUTDIR}" -d "${CHECKVDB}" -t ${SLURM_CPUS_PER_TASK}
 echo "Done."
 
+$ls/checkv
+
+
+$less quality_summary_votus.tsv.  
+
+Complete 1 k141_59834
+Not determined 2
+Low Quality 18 
+Medium Quality 1
+
 $ gcloud storage cp gs://gu-biology-dept-class/ClassProject/votus_10kb_6samples.fna [location]
+#run vOTU against class contigs 
 
+$mkdir bowtie2
+$cp votus_10kb_6samples.fna bowtie2
+$ srun --pty bash  #connect to compute node
+$ module load bowtie2
+$ bowtie2-build votus_10kb_6samples.fna votu_index
+$ exit
 
+nano bowtieslurm
 
+SLURM SCRIPT:
 
+#!/bin/bash
+#SBATCH --job name=bowtie2_vOTUs                 
+#SBATCH --output=/home/mjd356/virome_project/logs+scripts/bowtie-%j.out
+#SBATCH --error=/home/mjd356/virome_project/logs+scripts/bowtie-%j.err
+#SBATCH --mail-type=END,FAIL
+#SBATCH --mail-user=mjd356@georgetown.edu
+#SBATCH --time=8:00:00                                
+#SBATCH --mem=16G                        
 
+# ---------SET UP----------
+SAMPLE= ”sample2_mjd356”  	#whatever your sample # is!
+INDEX="home/mjd356/virome_project/bowtie2/votu_index"
+OUTPUTDIR="home/mjd356/virome_project/bowtie2/${SAMPLE}"
 
+# --------- LOAD MODULES ----------
+module purge
+module load bowtie2/2.5.4
 
+# --------- RUN BOWTIE2 AND PIPE TO SAMTOOLS ----------
 
+# First make output and log directories; move into OUTPUTDIR
+mkdir -p "${OUTPUTDIR}"
+cd "${OUTPUTDIR}"
+mkdir -p logs
 
+echo "Running bowtie2 on sample ${SAMPLE}"
 
+bowtie2 -p 8 -x "${INDEX}" -1 "/home/mjd356/virome_project/reads/trimmed/SRR6996005_forward_paired.fastq.gz" -2 "/home/mjd356/virome_project/reads/trimmed/SRR6996005_reverse_paired.fastq.gz" \
+| samtools view -bS - > "${SAMPLE}.bam"
+
+echo "Finished running bowtie2 and performing compression"
+
+#---------sort and index files
+echo "Sorting"
+samtools sort "${SAMPLE}.bam" > "${SAMPLE}_sorted.bam"
+
+echo "Indexing"
+samtools index "${SAMPLE}_sorted.bam"
+
+echo "Finished ${SAMPLE}"
+
+$ gcloud storage cp [file] gs://gu-biology-dept-class/ClassProject/bam
 
 
