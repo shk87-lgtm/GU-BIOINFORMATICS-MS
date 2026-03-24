@@ -209,7 +209,7 @@ module load checkv
 CHECKVDB="/home/mjd356/virome_project/checkv/checkv-db-v1.5"
 
 SAMPLE_ID="vOTUs"
-INPUT="/home/mjd356/virome_project/virome_project/votus/final-viral-combined_min5kb.fa"
+INPUT="/home/mjd356/virome_project/votus/votus_final.fna"
 OUTDIR="/home/mjd356/virome_project/checkv/${SAMPLE_ID}"
 
 mkdir -p "${OUTDIR}"
