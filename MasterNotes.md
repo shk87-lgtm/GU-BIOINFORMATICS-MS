@@ -295,7 +295,9 @@ $ gcloud storage cp [file] gs://gu-biology-dept-class/ClassProject/bam
 Downloaded https://console.cloud.google.com/storage/browser/_details/gu-biology-dept-class/ClassProject/votus_6samples_coverm.tsv?pageState=(%22StorageObjectListTable%22:(%22f%22:%22%255B%255D%22))&project=gcp-gu-hpc-medusa from class bucket
 
 install.packages("tidyverse")
+
 install.packages("readr")
+
 read.csv("ClassProject_votus_6samples_coverm.tsv")
 
 https://rpubs.com/skar/1414271
