@@ -298,49 +298,5 @@ install.packages("tidyverse")
 install.packages("readr")
 read.csv("ClassProject_votus_6samples_coverm.tsv")
 
-# ==== EDIT THESE THREE LINES ====
-filename <- "ClassProject_votus_6samples_coverm.tsv"  # Excel file name
-tpm_threshold <- 10                                  # keep vOTUs with max TPM > this
-heatmap_colors <- c("#440154", "#31688e", "#35b779", "#fde725")
-
-# =================================
-library(readr)
-library(readxl)
-library(pheatmap)
-
-# 1. Read the Excel file
-cov <- read_tsv(filename)
-
-# 2. Keep Contig and TPM columns only
-tpm_cols <- grepl("TPM$", names(cov))
-cov_tpm <- cov[ , c("Contig", names(cov)[tpm_cols])]
-
-# Remove S1k141_26921_full
-cov_tpm <- subset(cov_tpm, Contig != "S1k141_26921||full")
-
-# 3. Optional filter: drop very low-abundance vOTUs
-cov_tpm$max_tpm <- apply(cov_tpm[ , -1], 1, max, na.rm = TRUE)
-cov_tpm <- subset(cov_tpm, max_tpm > tpm_threshold)
-cov_tpm$max_tpm <- NULL
-
-# If everything got filtered out (threshold too high), warn and stop
-if (nrow(cov_tpm) == 0) {
-  stop("No vOTUs passed the TPM threshold. Try lowering tpm_threshold.")
-}
-
-# 4. Make matrix for heatmap (rows = vOTUs, cols = samples)
-mat <- as.matrix(cov_tpm[ , -1])
-rownames(mat) <- cov_tpm$Contig
-
-# 5. Log-transform for nicer color scaling
-mat_log <- log10(mat + 1)
-
-# 6. Draw heat map
-pheatmap(mat_log,
-         cluster_rows = TRUE,
-         cluster_cols = TRUE,
-         scale = "none",
-         color = colorRampPalette(heatmap_colors)(100),
-         fontsize_row = 8,
-         fontsize_col = 10,
-         main = "vOTU relative abundance (log10 TPM + 1)")
+https://rpubs.com/skar/1414271
+(link to code and graphs from R)
