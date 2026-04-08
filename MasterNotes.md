@@ -225,6 +225,23 @@ echo "Done. Contigs are in ${OUTDIR}/final.contigs.fa"
 ```bash
 sbatch megahit_run.slurm
 ```
+
+## Results: Metagenome Assembly
+
+The assembly produced **59,754 contigs** from the trimmed reads.
+
+Assembly statistics:
+- Total length: 30,261,886 bp
+- Average contig length: 506.4 bp
+- Minimum contig length: 200 bp
+- Maximum contig length: 185,956 bp
+- N50: 463 bp
+- GC content: 55.1%
+
+## Interpretation
+
+The large number of contigs and relatively low N50 indicate a **fragmented assembly**, which is expected for metagenomic data due to the presence of many different organisms and uneven sequencing depth. However, the presence of long contigs (>100 kb) suggests that some genomic regions were successfully reconstructed, enabling downstream viral identification.
+
 --------------------
 ## Step 6: Inspect assembly statistics
 
@@ -322,6 +339,16 @@ echo "Done."
 ```bash
 sbatch virsorter_run.slurm
 ```
+
+## Results: Viral Contig Identification
+
+VirSorter2 identified a subset of assembled contigs as viral sequences using gene content, hallmark genes, and similarity to known viral genomes.
+
+All viral contigs passed the minimum length threshold of **≥5 kb**, so no sequences were removed during filtering.
+
+## Interpretation
+
+This step successfully isolated the viral component of the metagenome. The fact that all detected viral contigs were ≥5 kb suggests that they contain sufficient genomic context for reliable classification and downstream analysis.
 --------------------
 ## Step 8: Assess viral genome quality with CheckV
 
@@ -375,6 +402,18 @@ checkv end_to_end "${INPUT}" "${OUTDIR}" -d "${CHECKVDB}" -t ${SLURM_CPUS_PER_TA
 ```bash
 sbatch checkv_run.slurm
 ```
+## Results: Viral Genome Quality (CheckV)
+
+CheckV classified the viral sequences into quality categories:
+
+- Complete: 1 genome
+- Medium quality: 1 genome
+- Low quality: 18 genomes
+- Not determined: 2 genomes
+
+## Interpretation
+
+Most viral contigs are **low quality or incomplete**, which is expected for metagenomic assemblies due to fragmentation and uneven coverage. However, the presence of at least one complete genome confirms that the pipeline successfully reconstructed a full viral genome. Medium-quality genomes may still be useful for functional analysis.
 --------------------
 ## Step 9: Map reads back to reference vOTUs with Bowtie2
 
@@ -453,6 +492,14 @@ The final abundance table is used to calculate ecological diversity metrics such
 Link to workflow
 
 https://rpubs.com/skar/1414271
+
+## Results: Viral Diversity Analysis
+
+Viral abundance data was used to calculate diversity metrics such as richness and Shannon diversity. Visualization using barplots and heatmaps revealed variation in viral community composition across samples.
+
+## Interpretation
+
+Differences in richness reflect variation in the number of viral populations present, while Shannon diversity captures both richness and evenness. Heatmap clustering highlights similarities between samples and identifies dominant viral populations.
 
 
 
